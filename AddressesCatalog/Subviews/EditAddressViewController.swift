@@ -18,7 +18,6 @@ class EditAddressViewController: UIViewController {
     private let originalAddress: Address
     private var editedAddress: Address
     
-    // UI Components
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
     
@@ -56,7 +55,6 @@ class EditAddressViewController: UIViewController {
     }
     
     private func setupUI() {
-        // Scroll View
         view.addSubview(scrollView)
         scrollView.addSubview(contentStack)
         
@@ -81,22 +79,17 @@ class EditAddressViewController: UIViewController {
             contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        // Dirección (solo lectura)
         let addressSection = createSection(title: "Dirección", value: editedAddress.addressLine1)
         
-        // Ciudad
         let citySection = createEditableSection(title: "Ciudad", textField: cityTextField)
         cityTextField.placeholder = "Ingrese la ciudad"
-        
-        // Estado / Provincia
+
         let stateSection = createEditableSection(title: "Estado / Provincia", textField: stateTextField)
         stateTextField.placeholder = "Ingrese el estado o provincia"
         
-        // Código Postal y País (solo lectura)
         postalCodeLabel.text = "Código Postal: \(editedAddress.postalCode)"
         countryLabel.text = "País: \(editedAddress.countryRegion)"
-        
-        // Agregar todo al stack
+
         contentStack.addArrangedSubview(addressSection)
         contentStack.addArrangedSubview(citySection)
         contentStack.addArrangedSubview(stateSection)
@@ -109,7 +102,7 @@ class EditAddressViewController: UIViewController {
         stateTextField.text = editedAddress.stateProvince
     }
     
-    // MARK: - Helpers para crear secciones
+    // MARK: - create sections
     private func createSection(title: String, value: String) -> UIStackView {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -150,19 +143,14 @@ class EditAddressViewController: UIViewController {
         return stack
     }
     
-    // MARK: - Guardar
+    // MARK: - Save
     @objc private func saveChanges() {
-        // Actualizar datos editables
         editedAddress.city = cityTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? editedAddress.city
         editedAddress.stateProvince = stateTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? editedAddress.stateProvince
-        
-        // Actualizar fecha de modificación
+
         editedAddress.modifiedDate = Date()
-        
-        // Guardar
         AddressManager.shared.updateAddress(editedAddress)
         delegate?.didUpdateAddress()
-        
         navigationController?.popViewController(animated: true)
     }
 }

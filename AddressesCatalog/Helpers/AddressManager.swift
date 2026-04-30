@@ -19,29 +19,19 @@ class AddressManager {
     }
     
     func loadData() {
-        // 1. Intentar cargar desde JSON local
         if let saved = loadFromLocal(), !saved.isEmpty {
             addresses = saved
-            print("✅ Cargadas \(addresses.count) direcciones desde JSON local")
             return
         }
-        
-        // 2. Cargar CSV desde Bundle
+
         guard let csvURL = Bundle.main.url(forResource: csvFileName, withExtension: "csv") else {
-            print("❌ ERROR CRÍTICO: No se encontró Address.csv en el Bundle")
             return
         }
         
         do {
             let csvString = try String(contentsOf: csvURL, encoding: .utf8)
-            print("✅ CSV encontrado | Caracteres: \(csvString.count)")
-            print("Primeras 300 caracteres:\n\(csvString.prefix(300))")
-            
-            // Parser muy simple para diagnóstico
             addresses = simpleParseCSV(csvString)
-            
-            print("📊 Total de direcciones parseadas: \(addresses.count)")
-            
+
             if addresses.count > 0 {
                 saveToLocal()
                 print("🎉 ¡ÉXITO! Se cargaron \(addresses.count) direcciones.")
@@ -53,7 +43,6 @@ class AddressManager {
         }
     }
     
-    // Parser extremadamente simple y tolerante para este CSV
     private func simpleParseCSV(_ csvString: String) -> [Address] {
         var result: [Address] = []
         let lines = csvString.components(separatedBy: .newlines)
@@ -63,7 +52,7 @@ class AddressManager {
         print("Total de líneas detectadas: \(lines.count)")
         
         for (index, line) in lines.enumerated() {
-            if index == 0 { continue } // saltar header
+            if index == 0 { continue }
             
             let columns = line.components(separatedBy: ",")
             
@@ -107,8 +96,7 @@ class AddressManager {
         
         return nil
     }
-    
-    // Persistencia (sin cambios)
+
     private func saveToLocal() {
         do {
             let encoder = JSONEncoder()

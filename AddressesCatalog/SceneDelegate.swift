@@ -16,12 +16,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        
-        // Aquí es donde indicas cuál ViewController quieres que se abra primero
-        let rootViewController = AddressListViewController()
-        
-        // Si quieres Navigation Controller (recomendado)
-        let navigationController = UINavigationController(rootViewController: rootViewController)
+
+        let rootVC = AddressListViewController()
+        let navigationController = UINavigationController(rootViewController: rootVC)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
