@@ -18,6 +18,7 @@
 		C78AE9A92FA2EFC300948EB1 /* AddressListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9A82FA2EFC300948EB1 /* AddressListViewController.swift */; };
 		C78AE9AC2FA3273500948EB1 /* AddressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9AB2FA3273500948EB1 /* AddressTableViewCell.swift */; };
 		C78AE9AF2FA327A900948EB1 /* EditAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9AE2FA327A900948EB1 /* EditAddressViewController.swift */; };
+		C78AE9B32FA32DE300948EB1 /* Address.csv in Resources */ = {isa = PBXBuildFile; fileRef = C78AE9B02FA3297A00948EB1 /* Address.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		C78AE9A82FA2EFC300948EB1 /* AddressListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListViewController.swift; sourceTree = "<group>"; };
 		C78AE9AB2FA3273500948EB1 /* AddressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableViewCell.swift; sourceTree = "<group>"; };
 		C78AE9AE2FA327A900948EB1 /* EditAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressViewController.swift; sourceTree = "<group>"; };
+		C78AE9B02FA3297A00948EB1 /* Address.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Address.csv; sourceTree = "<group>"; usesTabs = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 		C78AE98F2FA2EA7800948EB1 /* AddressesCatalog */ = {
 			isa = PBXGroup;
 			children = (
+				C78AE9B02FA3297A00948EB1 /* Address.csv */,
 				C78AE9AD2FA3279E00948EB1 /* Subviews */,
 				C78AE9AA2FA3270800948EB1 /* Cells */,
 				C78AE9902FA2EA7800948EB1 /* AppDelegate.swift */,
@@ -159,6 +162,7 @@
 				C78AE99A2FA2EA7A00948EB1 /* Assets.xcassets in Resources */,
 				C78AE99D2FA2EA7A00948EB1 /* Base in Resources */,
 				C78AE9982FA2EA7800948EB1 /* Base in Resources */,
+				C78AE9B32FA32DE300948EB1 /* Address.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

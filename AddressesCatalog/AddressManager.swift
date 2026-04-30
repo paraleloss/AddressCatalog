@@ -11,99 +11,129 @@ class AddressManager {
     static let shared = AddressManager()
     private(set) var addresses: [Address] = []
     
-    private let fileName = "Address"
+    private let csvFileName = "Address"
     private let savedFileName = "addresses.json"
     
     private init() {
         loadData()
     }
-
+    
     func loadData() {
-
-        if let savedAddresses = loadFromLocal() {
-            addresses = savedAddresses
+        // 1. Intentar cargar desde JSON local
+        if let saved = loadFromLocal(), !saved.isEmpty {
+            addresses = saved
+            print("✅ Cargadas \(addresses.count) direcciones desde JSON local")
             return
         }
         
-        guard let csvURL = Bundle.main.url(forResource: fileName, withExtension: "csv") else {
-            print("No se encontró Address.csv")
+        // 2. Cargar CSV desde Bundle
+        guard let csvURL = Bundle.main.url(forResource: csvFileName, withExtension: "csv") else {
+            print("❌ ERROR CRÍTICO: No se encontró Address.csv en el Bundle")
             return
         }
         
         do {
             let csvString = try String(contentsOf: csvURL, encoding: .utf8)
-            addresses = parseCSV(csvString)
-            saveToLocal() // 1st save
+            print("✅ CSV encontrado | Caracteres: \(csvString.count)")
+            print("Primeras 300 caracteres:\n\(csvString.prefix(300))")
+            
+            // Parser muy simple para diagnóstico
+            addresses = simpleParseCSV(csvString)
+            
+            print("📊 Total de direcciones parseadas: \(addresses.count)")
+            
+            if addresses.count > 0 {
+                saveToLocal()
+                print("🎉 ¡ÉXITO! Se cargaron \(addresses.count) direcciones.")
+            } else {
+                print("❌ Falló el parsing. Ninguna dirección fue cargada.")
+            }
         } catch {
-            print("Error leyendo CSV: \(error)")
+            print("❌ Error al leer el archivo: \(error)")
         }
     }
     
-    private func parseCSV(_ csvString: String) -> [Address] {
-        var addresses: [Address] = []
-        let rows = csvString.components(separatedBy: .newlines)
+    // Parser extremadamente simple y tolerante para este CSV
+    private func simpleParseCSV(_ csvString: String) -> [Address] {
+        var result: [Address] = []
+        let lines = csvString.components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
         
-        guard rows.count > 1 else { return [] }
+        print("Total de líneas detectadas: \(lines.count)")
         
-        for row in rows.dropFirst() {
-            let columns = row.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            guard columns.count >= 9 else { continue }
+        for (index, line) in lines.enumerated() {
+            if index == 0 { continue } // saltar header
             
-            if let addressID = Int(columns[0]),
-               let modifiedDate = parseDate(columns[8]) {
-                
-                let address = Address(
-                    id: addressID,
-                    addressLine1: columns[1],
-                    addressLine2: columns[2] == "NULL" ? nil : columns[2],
-                    city: columns[3],
-                    stateProvince: columns[4],
-                    countryRegion: columns[5],
-                    postalCode: columns[6],
-                    rowguid: columns[7],
-                    modifiedDate: modifiedDate
-                )
-                addresses.append(address)
+            let columns = line.components(separatedBy: ",")
+            
+            guard columns.count >= 9 else {
+                if index < 10 {
+                    print("Línea \(index) tiene solo \(columns.count) columnas: \(line.prefix(100))...")
+                }
+                continue
             }
+            
+            guard let id = Int(columns[0].trimmingCharacters(in: .whitespaces)) else { continue }
+            
+            let dateStr = columns[8].trimmingCharacters(in: .whitespaces)
+            guard let modifiedDate = parseDate(dateStr) else { continue }
+            
+            let address = Address(
+                id: id,
+                addressLine1: columns[1].trimmingCharacters(in: .whitespaces),
+                addressLine2: columns[2] == "NULL" ? nil : columns[2].trimmingCharacters(in: .whitespaces),
+                city: columns[3].trimmingCharacters(in: .whitespaces),
+                stateProvince: columns[4].trimmingCharacters(in: .whitespaces),
+                countryRegion: columns[5].trimmingCharacters(in: .whitespaces),
+                postalCode: columns[6].trimmingCharacters(in: .whitespaces),
+                rowguid: columns[7].trimmingCharacters(in: .whitespaces),
+                modifiedDate: modifiedDate
+            )
+            result.append(address)
         }
-        return addresses
+        return result
     }
     
     private func parseDate(_ dateString: String) -> Date? {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter.date(from: dateString)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        if let date = formatter.date(from: dateString) { return date }
+        
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        if let date = formatter.date(from: dateString) { return date }
+        
+        return nil
     }
     
-    // MARK: - data persistance
+    // Persistencia (sin cambios)
     private func saveToLocal() {
         do {
-            let data = try JSONEncoder().encode(addresses)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(addresses)
             let url = getDocumentsDirectory().appendingPathComponent(savedFileName)
             try data.write(to: url)
-        } catch {
-            print("Error guardando datos: \(error)")
-        }
+        } catch { print("Error guardando JSON") }
     }
     
     private func loadFromLocal() -> [Address]? {
         let url = getDocumentsDirectory().appendingPathComponent(savedFileName)
         guard FileManager.default.fileExists(atPath: url.path) else { return nil }
-        
         do {
             let data = try Data(contentsOf: url)
-            return try JSONDecoder().decode([Address].self, from: data)
-        } catch {
-            print("Error cargando datos locales: \(error)")
-            return nil
-        }
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode([Address].self, from: data)
+        } catch { return nil }
     }
     
     private func getDocumentsDirectory() -> URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
     
-    // MARK: - update method
     func updateAddress(_ address: Address) {
         if let index = addresses.firstIndex(where: { $0.id == address.id }) {
             addresses[index] = address
@@ -111,12 +141,6 @@ class AddressManager {
         }
     }
     
-    // get cities
-    func getUniqueCities() -> [String] {
-        Array(Set(addresses.map { $0.city })).sorted()
-    }
-    
-    func getUniqueStates() -> [String] {
-        Array(Set(addresses.map { $0.stateProvince })).sorted()
-    }
+    func getUniqueCities() -> [String] { Array(Set(addresses.map { $0.city })).sorted() }
+    func getUniqueStates() -> [String] { Array(Set(addresses.map { $0.stateProvince })).sorted() }
 }

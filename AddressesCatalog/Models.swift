@@ -8,9 +8,9 @@
 import Foundation
 
 struct Address: Codable, Identifiable {
-    let id: Int                    // AddressID
+    let id: Int
     var addressLine1: String
-    var addressLine2: String?      // NULL
+    var addressLine2: String?
     var city: String
     var stateProvince: String
     var countryRegion: String
