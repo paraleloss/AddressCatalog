@@ -17,6 +17,7 @@
 		C78AE9A72FA2EF1400948EB1 /* AddressManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9A62FA2EF1400948EB1 /* AddressManager.swift */; };
 		C78AE9A92FA2EFC300948EB1 /* AddressListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9A82FA2EFC300948EB1 /* AddressListViewController.swift */; };
 		C78AE9AC2FA3273500948EB1 /* AddressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9AB2FA3273500948EB1 /* AddressTableViewCell.swift */; };
+		C78AE9AF2FA327A900948EB1 /* EditAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78AE9AE2FA327A900948EB1 /* EditAddressViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		C78AE9A62FA2EF1400948EB1 /* AddressManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressManager.swift; sourceTree = "<group>"; };
 		C78AE9A82FA2EFC300948EB1 /* AddressListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListViewController.swift; sourceTree = "<group>"; };
 		C78AE9AB2FA3273500948EB1 /* AddressTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressTableViewCell.swift; sourceTree = "<group>"; };
+		C78AE9AE2FA327A900948EB1 /* EditAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 		C78AE98F2FA2EA7800948EB1 /* AddressesCatalog */ = {
 			isa = PBXGroup;
 			children = (
+				C78AE9AD2FA3279E00948EB1 /* Subviews */,
 				C78AE9AA2FA3270800948EB1 /* Cells */,
 				C78AE9902FA2EA7800948EB1 /* AppDelegate.swift */,
 				C78AE9922FA2EA7800948EB1 /* SceneDelegate.swift */,
@@ -85,6 +88,14 @@
 				C78AE9AB2FA3273500948EB1 /* AddressTableViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		C78AE9AD2FA3279E00948EB1 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				C78AE9AE2FA327A900948EB1 /* EditAddressViewController.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +174,7 @@
 				C78AE9932FA2EA7800948EB1 /* SceneDelegate.swift in Sources */,
 				C78AE9AC2FA3273500948EB1 /* AddressTableViewCell.swift in Sources */,
 				C78AE9A92FA2EFC300948EB1 /* AddressListViewController.swift in Sources */,
+				C78AE9AF2FA327A900948EB1 /* EditAddressViewController.swift in Sources */,
 				C78AE9A52FA2EDCD00948EB1 /* Models.swift in Sources */,
 				C78AE9A72FA2EF1400948EB1 /* AddressManager.swift in Sources */,
 			);

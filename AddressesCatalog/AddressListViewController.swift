@@ -40,7 +40,6 @@ class AddressListViewController: UIViewController {
     }
 }
 
-// MARK: - UITableView DataSource & Delegate
 extension AddressListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,7 +61,6 @@ extension AddressListViewController: UITableViewDataSource, UITableViewDelegate 
     }
 }
 
-// MARK: - Delegate para refrescar lista
 extension AddressListViewController: EditAddressDelegate {
     func didUpdateAddress() {
         loadAddresses()
